@@ -76,6 +76,15 @@ public class Game implements Runnable{
 				x = Integer.parseInt(scan.nextLine());
 				System.out.print("Y:");
 				y = Integer.parseInt(scan.nextLine());
+				if (x > spielfelder[0].length|| y > spielfelder.length - 1 || x < 0 || y < 0) {
+					do {
+						System.out.println("Das Feld liegt nicht innerhalb des Spielfeldes\nVersuchen sie es nochmal");
+						System.out.print("X:");
+						x = Integer.parseInt(scan.nextLine());
+						System.out.print("Y:");
+						y = Integer.parseInt(scan.nextLine());
+					} while (x > spielfelder[0].length|| y > spielfelder.length - 1 || x < 0 || y < 0);
+				}
 				spielfelder[y][x].Hidden = false;	
 			}
 		} while (true);
