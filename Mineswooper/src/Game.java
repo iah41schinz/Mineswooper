@@ -71,22 +71,32 @@ public class Game implements Runnable{
 			}
 			//Wenn nicht, dann wird nach den nächsten Koordinaten gefragt.
 			else {
-				System.out.println("Geben sie die Koordinaten an");
+				System.out.println("Welches Feld möchten sie aufdecken?");
 				System.out.print("X:");
-				x = Integer.parseInt(scan.nextLine());
+				x = getIntfromInput(0, spielfelder[0].length);
 				System.out.print("Y:");
-				y = Integer.parseInt(scan.nextLine());
-				if (x > spielfelder[0].length|| y > spielfelder.length - 1 || x < 0 || y < 0) {
-					do {
-						System.out.println("Das Feld liegt nicht innerhalb des Spielfeldes\nVersuchen sie es nochmal");
-						System.out.print("X:");
-						x = Integer.parseInt(scan.nextLine());
-						System.out.print("Y:");
-						y = Integer.parseInt(scan.nextLine());
-					} while (x > spielfelder[0].length|| y > spielfelder.length - 1 || x < 0 || y < 0);
-				}
+				y = getIntfromInput(0, spielfelder.length);
 				spielfelder[y][x].Hidden = false;	
 			}
 		} while (true);
 	}
+	
+	private int getIntfromInput(int min, int max) {
+		int i;
+		do {
+			try {
+				i = Integer.parseInt(scan.nextLine());
+				if (i > min && i < max) {
+					return i;
+				}
+				else {
+					System.out.println("Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
+
+				}
+			} catch (NumberFormatException e) {
+				System.out.print("Error: Die Eingegebene Zahl ist kein gültiger Integer.\nVersuchen sie es nochmal");
+			}
+		} while (true);
+	}
+	
 }

@@ -11,9 +11,9 @@ public class Program {
 		int y = Integer.parseInt(scan.nextLine());
 		System.out.println("Geben sie die Anzahl der Bomben an:");
 		int AnzahlBomben = Integer.parseInt(scan.nextLine());
-		scan.close();
 		Game game = new Game(x,y,AnzahlBomben);
 		game.run();
+		scan.close();
 	}
 
 }
