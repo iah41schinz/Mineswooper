@@ -73,15 +73,24 @@ public class Game implements Runnable{
 			else {
 				System.out.println("Welches Feld möchten sie aufdecken?");
 				System.out.print("X:");
-				x = getIntfromInput(0, spielfelder[0].length);
+				x = getIntfromInput(0, spielfelder[0].length,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
 				System.out.print("Y:");
-				y = getIntfromInput(0, spielfelder.length);
+				y = getIntfromInput(0, spielfelder.length,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
 				spielfelder[y][x].Hidden = false;	
 			}
 		} while (true);
 	}
 	
-	private int getIntfromInput(int min, int max) {
+	
+	/**Takes the next input from the System.in Stream and 
+	 * Converts it to an Integer as long as the Input does not match the specifications and 
+	 * finally returns that Input as an Integer.
+	 * @param min The Smallest Integer accepted as Input
+	 * @param max The Largest Integer accepted as Input
+	 * @param message The message that is displayed if the Integer is not within the specified bounds
+	 * @return
+	 */
+	private int getIntfromInput(int min, int max,String message) {
 		int i;
 		do {
 			try {
@@ -90,8 +99,7 @@ public class Game implements Runnable{
 					return i;
 				}
 				else {
-					System.out.println("Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
-
+					System.out.println(message);
 				}
 			} catch (NumberFormatException e) {
 				System.out.print("Error: Die Eingegebene Zahl ist kein gültiger Integer.\nVersuchen sie es nochmal");
