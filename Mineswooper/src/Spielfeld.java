@@ -1,8 +1,4 @@
 
-/**
- * @author schinz
- *
- */
 public class Spielfeld {
 
 	

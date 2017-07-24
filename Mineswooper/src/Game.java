@@ -71,16 +71,35 @@ public class Game implements Runnable{
 			}
 			//Wenn nicht, dann wird nach den nächsten Koordinaten gefragt.
 			else {
-				System.out.println("Welches Feld möchten sie aufdecken?");
-				System.out.print("X:");
-				x = getIntfromInput(0, spielfelder[0].length,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
-				System.out.print("Y:");
-				y = getIntfromInput(0, spielfelder.length,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
-				spielfelder[y][x].Hidden = false;	
+				nextTurn();
 			}
 		} while (true);
 	}
 	
+	
+	private void nextTurn() {
+		System.out.println("Flag(P) Dig(D)");
+		switch (scan.nextLine()) {
+		case "p":
+		case "P":
+			System.out.print("X:");
+			x = getIntfromInput(0, spielfelder[0].length,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
+			System.out.print("Y:");
+			y = getIntfromInput(0, spielfelder.length,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
+			spielfelder[y][x].Flagged = true;
+			break;
+		case "D":
+		case "d":
+			System.out.print("X:");
+			x = getIntfromInput(0, spielfelder[0].length - 1,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
+			System.out.print("Y:");
+			y = getIntfromInput(0, spielfelder.length - 1,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
+			spielfelder[y][x].Hidden = false;
+		default:
+			break;
+		}
+	
+	}
 	
 	/**Takes the next input from the System.in Stream and 
 	 * Converts it to an Integer as long as the Input does not match the specifications and 
@@ -95,7 +114,7 @@ public class Game implements Runnable{
 		do {
 			try {
 				i = Integer.parseInt(scan.nextLine());
-				if (i > min && i < max) {
+				if (i >= min && i <= max) {
 					return i;
 				}
 				else {
