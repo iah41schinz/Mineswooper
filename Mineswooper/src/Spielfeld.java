@@ -24,7 +24,10 @@ public class Spielfeld {
 	 * @return
 	 */
 	public char look() {
-		if (Hidden == true) {
+		if (Flagged == true) {
+			return 'P';
+		}
+		else if (Hidden == true) {
 			return '#';
 		}
 		else if (Bomb == true) {
@@ -37,4 +40,5 @@ public class Spielfeld {
 	}
 	boolean Hidden;
 	boolean Bomb;
+	boolean Flagged;
 }

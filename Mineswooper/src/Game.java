@@ -4,7 +4,7 @@ import java.lang.Thread;
 public class Game implements Runnable{
 	
 	Spielfeld[][] spielfelder;
-	Scanner scan = new Scanner(System.in);
+	Scanner scan = Program.scan;
 	int x;
 	int y;
 	int XofRandom;
