@@ -10,9 +10,11 @@ public class Game implements Runnable{
 	int XofRandom;
 	int YofRandom;
 	boolean gameover = false;
+	int AnzahlBomben;
 	Random r = new Random();
 	
 	public Game(int x, int y,int AnzahlBomben) {
+		this.AnzahlBomben = AnzahlBomben;
 		//Das Spielfeld wird Generiert
 		spielfelder = new Spielfeld[x][y];
 		for (int yKoordinate = 0; yKoordinate < spielfelder.length; yKoordinate++) {
@@ -39,6 +41,7 @@ public class Game implements Runnable{
 
 	@Override
 	public void run() {
+		int bombsDefused = 0;
 		do {
 			//Um das Spielfeld werden Koordinaten zur Orientierung geschrieben.
 			System.out.print(' ');
@@ -59,6 +62,9 @@ public class Game implements Runnable{
 					//Wenn eine Bombe('O') aufgedeckt wird, ist gameover == true.
 					if(feld.look() == 'O')
 						gameover = true;
+					else if (feld.Flagged == true && feld.Bomb == true) {
+						bombsDefused++;
+					}
 				}
 				System.out.println();
 			}
@@ -66,6 +72,11 @@ public class Game implements Runnable{
 			//Wenn gameover == true wird die Spielschleife beendet.
 			if(gameover == true) {
 				System.out.println("- GAMEOVER -");
+				scan.nextLine();
+				break;
+			}
+			else if (bombsDefused == AnzahlBomben) {
+				System.out.println("- YOU WIN -");
 				scan.nextLine();
 				break;
 			}
