@@ -93,7 +93,7 @@ public class Game implements Runnable{
 			if(Cells[y][x].Flagged == true) {break;}
 			//Digging an open Cell is not possible and ends the turn
 			else if(Cells[y][x].Hidden == false) {break;}
-			Cells[y][x].Hidden = false;
+			openCell(x,y);
 		default:
 			break;
 		}
@@ -159,4 +159,9 @@ public class Game implements Runnable{
 		} while (true);
 	}
 	
+	//TODO Algorithm to iterate through all neighboring cells and open them as well.
+	private void openCell(int x, int y) {
+		Cells[y][x].Hidden = false;
+		if(Cells[y][x - 1].Hidden = true) openCell(x,y - 1);
+	}
 }
