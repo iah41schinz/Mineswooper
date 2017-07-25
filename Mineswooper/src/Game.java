@@ -3,38 +3,39 @@ import java.util.Scanner;
 import java.lang.Thread;
 public class Game implements Runnable{
 	
-	Spielfeld[][] spielfelder;
+	Cell[][] Cells;
 	Scanner scan = Program.scan;
 	int x;
 	int y;
 	int XofRandom;
 	int YofRandom;
 	boolean gameover = false;
-	int AnzahlBomben;
+	int numBombs;
+	int bombsDefused = 0;
 	Random r = new Random();
 	
 	public Game(int x, int y,int AnzahlBomben) {
-		this.AnzahlBomben = AnzahlBomben;
-		//Das Spielfeld wird Generiert
-		spielfelder = new Spielfeld[x][y];
-		for (int yKoordinate = 0; yKoordinate < spielfelder.length; yKoordinate++) {
+		this.numBombs = AnzahlBomben;
+		//The Cells are generated
+		Cells = new Cell[x][y];
+		for (int yKoordinate = 0; yKoordinate < Cells.length; yKoordinate++) {
 
-			for (int xKoordinate = 0 ;xKoordinate < spielfelder[yKoordinate].length; xKoordinate++) {
-				spielfelder[yKoordinate][xKoordinate] = new Spielfeld();
+			for (int xKoordinate = 0 ;xKoordinate < Cells[yKoordinate].length; xKoordinate++) {
+				Cells[yKoordinate][xKoordinate] = new Cell();
 			}
 		}
 		
-		//Felder werden Zufällig zu Bomben
+		//Cells are Randomly selected as Bombs
 		for (int i = 0; i < AnzahlBomben; i++) {
 			XofRandom = r.nextInt(x);
 			YofRandom = r.nextInt(y);
-			if(spielfelder[YofRandom][XofRandom].Bomb == true) {
-				//Wenn das zufällige Feld bereits eine Bombe ist,
-				//Wird die Schleife noch einmal ausgeführt
+			if(Cells[YofRandom][XofRandom].Bomb == true) {
+				// if the randomly selected Cell is already a bomb
+				// the loop is executed again
 				i--;
 			}
 			else {
-				spielfelder[YofRandom][XofRandom].Bomb = true;
+				Cells[YofRandom][XofRandom].Bomb = true;
 			}
 		}
 	}
@@ -43,44 +44,22 @@ public class Game implements Runnable{
 	public void run() {
 		int bombsDefused = 0;
 		do {
-			//Um das Spielfeld werden Koordinaten zur Orientierung geschrieben.
-			System.out.print(' ');
-			for(int xKoordinate = 0; xKoordinate < spielfelder[0].length; xKoordinate++) {
-				//Koordinaten der X-Achse zeichnen
-				System.out.print(xKoordinate);
-			}
-			System.out.println();
-
+			renderCells();
 			
-			//Das Spielfeld wird durch eine for-schleife Iteriert und in die Kommandozeile geschrieben.
-			for (int yKoordinate = 0; yKoordinate < spielfelder.length; yKoordinate++) {
-				//Koordineten der Y-Achse zeichnen
-				System.out.print(yKoordinate);
-
-				for (Spielfeld feld : spielfelder[yKoordinate]) {
-					System.out.print(feld.look());
-					//Wenn eine Bombe('O') aufgedeckt wird, ist gameover == true.
-					if(feld.look() == 'O')
-						gameover = true;
-					else if (feld.Flagged == true && feld.Bomb == true) {
-						bombsDefused++;
-					}
-				}
-				System.out.println();
-			}
-			
-			//Wenn gameover == true wird die Spielschleife beendet.
+			//if gameover == true the gameover screen will be displayed and the gameloop will stop.
 			if(gameover == true) {
 				System.out.println("- GAMEOVER -");
 				scan.nextLine();
 				break;
 			}
-			else if (bombsDefused == AnzahlBomben) {
+			//if the number of defused bombs equals the number of bombs generated
+			// the victory screen is displayed and the gameloop will stop.
+			else if (bombsDefused == numBombs) {
 				System.out.println("- YOU WIN -");
 				scan.nextLine();
 				break;
 			}
-			//Wenn nicht, dann wird nach den nächsten Koordinaten gefragt.
+			// if not the user is taking his next turn.
 			else {
 				nextTurn();
 			}
@@ -88,36 +67,73 @@ public class Game implements Runnable{
 	}
 	
 	
+	/**Enables the user to either flag or dig a cell by using x and y coordinates from user input.
+	 * This only changes the Data and does not render any cells.
+	 */
 	private void nextTurn() {
 		System.out.println("Flag(P) Dig(D)");
 		switch (scan.nextLine()) {
 		case "p":
 		case "P":
 			System.out.print("X:");
-			x = getIntfromInput(0, spielfelder[0].length,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
+			x = getIntfromInput(0, Cells[0].length,"The specified Coordinate does not exist.\\nTry again:");
 			System.out.print("Y:");
-			y = getIntfromInput(0, spielfelder.length,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
-			spielfelder[y][x].Flagged = true;
+			y = getIntfromInput(0, Cells.length,"The specified Coordinate does not exist.\nTry again:");
+			Cells[y][x].Flagged = true;
 			break;
 		case "D":
 		case "d":
 			System.out.print("X:");
-			x = getIntfromInput(0, spielfelder[0].length - 1,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
+			x = getIntfromInput(0, Cells[0].length - 1,"The specified Coordinate does not exist.\nTry again:");
 			System.out.print("Y:");
-			y = getIntfromInput(0, spielfelder.length - 1,"Das Feld liegt nicht innerhalb des Spielfeldes.\nVersuchen sie es nochmal");
-			spielfelder[y][x].Hidden = false;
+			y = getIntfromInput(0, Cells.length - 1,"The specified Coordinate does not exist.\nTry again:");
+			Cells[y][x].Hidden = false;
 		default:
 			break;
 		}
 	
 	}
 	
-	/**Takes the next input from the System.in Stream and 
-	 * Converts it to an Integer as long as the Input does not match the specifications and 
+	
+	/**Draws the output of  
+	 * Cell.looks() : char
+	 * for every Cell in the Cells Array to the Commandline. 
+	 */
+	private void renderCells() {
+		// The Cells are surrounded by Integers for ease of orientation in the Cells Array.
+		System.out.print(' ');
+		for(int xKoordinate = 0; xKoordinate < Cells[0].length; xKoordinate++) {
+			//Draws the Indices of the X-Axis
+			System.out.print(xKoordinate);
+		}
+		System.out.println();
+
+		
+		//The Cells are Iterated through a for loop and then Drawn to the commandline
+		for (int yKoordinate = 0; yKoordinate < Cells.length; yKoordinate++) {
+			//Draws the Indices of the Y-Axis
+			System.out.print(yKoordinate);
+
+			for (Cell feld : Cells[yKoordinate]) {
+				System.out.print(feld.look());
+				// When a bomb('O') is drawn the gameover flag is set to true.
+				if(feld.look() == 'O')
+					gameover = true;
+				//if a bomb is flagged the bombsDefused Counter is incremented.
+				else if (feld.Flagged == true && feld.Bomb == true) {
+					bombsDefused++;
+				}
+			}
+			System.out.println();
+		}
+	}
+	
+	/**Takes the next input from the System.in stream and 
+	 * Converts it to an integer as long as the Input does not match the specifications and 
 	 * finally returns that Input as an Integer.
-	 * @param min The Smallest Integer accepted as Input
-	 * @param max The Largest Integer accepted as Input
-	 * @param message The message that is displayed if the Integer is not within the specified bounds
+	 * @param min The smallest Integer accepted as input
+	 * @param max The largest Integer accepted as input
+	 * @param message The message that is displayed if the integer is not within the specified bounds
 	 * @return
 	 */
 	private int getIntfromInput(int min, int max,String message) {
@@ -132,7 +148,7 @@ public class Game implements Runnable{
 					System.out.println(message);
 				}
 			} catch (NumberFormatException e) {
-				System.out.print("Error: Die Eingegebene Zahl ist kein gültiger Integer.\nVersuchen sie es nochmal");
+				System.out.print("Error: The entered number is not an integer.\nTry again:");
 			}
 		} while (true);
 	}

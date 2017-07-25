@@ -1,15 +1,15 @@
 
-public class Spielfeld {
+public class Cell {
 
 	
 
-	public Spielfeld() {
+	public Cell() {
 
 			Bomb = false;
 			Hidden = true;
 	}
 	
-	public Spielfeld(boolean Bomb) {
+	public Cell(boolean Bomb) {
 		// TODO Auto-generated constructor stub
 		this.Bomb = Bomb;
 		Hidden = true;
