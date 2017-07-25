@@ -14,8 +14,8 @@ public class Game implements Runnable{
 	int bombsDefused = 0;
 	Random r = new Random();
 	
-	public Game(int x, int y,int AnzahlBomben) {
-		this.numBombs = AnzahlBomben;
+	public Game(int x, int y,int numBombs) {
+		this.numBombs = numBombs;
 		//The Cells are generated
 		Cells = new Cell[x][y];
 		for (int yKoordinate = 0; yKoordinate < Cells.length; yKoordinate++) {
@@ -26,7 +26,7 @@ public class Game implements Runnable{
 		}
 		
 		//Cells are Randomly selected as Bombs
-		for (int i = 0; i < AnzahlBomben; i++) {
+		for (int i = 0; i < numBombs; i++) {
 			XofRandom = r.nextInt(x);
 			YofRandom = r.nextInt(y);
 			if(Cells[YofRandom][XofRandom].Bomb == true) {
@@ -79,6 +79,8 @@ public class Game implements Runnable{
 			x = getIntfromInput(0, Cells[0].length,"The specified Coordinate does not exist.\\nTry again:");
 			System.out.print("Y:");
 			y = getIntfromInput(0, Cells.length,"The specified Coordinate does not exist.\nTry again:");
+			//Flagging a flagged Cell removes the Flag and ends the turn
+			if(Cells[y][x].Flagged == true) {Cells[y][x].Flagged = false; break;}
 			Cells[y][x].Flagged = true;
 			break;
 		case "D":
@@ -87,6 +89,10 @@ public class Game implements Runnable{
 			x = getIntfromInput(0, Cells[0].length - 1,"The specified Coordinate does not exist.\nTry again:");
 			System.out.print("Y:");
 			y = getIntfromInput(0, Cells.length - 1,"The specified Coordinate does not exist.\nTry again:");
+			//Digging a flagged Cell is not possible and ends the turn
+			if(Cells[y][x].Flagged == true) {break;}
+			//Digging an open Cell is not possible and ends the turn
+			else if(Cells[y][x].Hidden == false) {break;}
 			Cells[y][x].Hidden = false;
 		default:
 			break;
@@ -148,7 +154,7 @@ public class Game implements Runnable{
 					System.out.println(message);
 				}
 			} catch (NumberFormatException e) {
-				System.out.print("Error: The entered number is not an integer.\nTry again:");
+				System.out.print("Error: The entered number is not a valid integer.\nTry again:");
 			}
 		} while (true);
 	}
