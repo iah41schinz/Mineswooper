@@ -29,12 +29,15 @@ public class Cell {
 		else if (Bomb == true) {
 			return 'O';
 		}
+		else if(neighboringBombs < 10 && neighboringBombs > 0) {
+			return (char)neighboringBombs;
+		}
 		else {
 			return ' ';
 		}
-
 	}
 	boolean Hidden;
 	boolean Bomb;
 	boolean Flagged;
+	int neighboringBombs;
 }

@@ -159,9 +159,37 @@ public class Game implements Runnable{
 		} while (true);
 	}
 	
-	//TODO Algorithm to iterate through all neighboring cells and open them as well.
+	//TODO Algorithm to iterate through all neighboring cells in a circle and open them as well.
 	private void openCell(int x, int y) {
+		//First count the bombs around the selected Cell
+		for (int tmpY = y - 1; tmpY < y - 1; tmpY++) {
+			for (int tmpX = x - 1; tmpX < x + 2; tmpX++) {
+				if (tmpX == x && tmpY == y) {
+					continue;
+				}
+				else if(Cells[tmpY][tmpX].Bomb == true){
+					Cells[y][x].neighboringBombs++;		
+				}
+				
+			}
+			
+		}
+		//if there are no Bombs 
+		//open all surrounding Cells
+		if(Cells[y][x].neighboringBombs != 0) {
+			for (int tmpY = y - 1; tmpY < y - 1; tmpY++) {
+				for (int tmpX = x - 1; tmpX < x + 2; tmpX++) {
+					if (tmpX == x && tmpY == y) {
+						continue;
+					}
+					else if(Cells[tmpY][tmpX].Hidden == true){
+						openCell(tmpX, tmpY);
+					}
+					
+				}
+				
+			}
+		}
 		Cells[y][x].Hidden = false;
-		if(Cells[y][x - 1].Hidden = true) openCell(x,y - 1);
 	}
 }
