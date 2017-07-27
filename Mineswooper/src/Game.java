@@ -17,7 +17,7 @@ public class Game implements Runnable{
 	public Game(int x, int y,int numBombs) {
 		this.numBombs = numBombs;
 		//The Cells are generated
-		Cells = new Cell[x][y];
+		Cells = new Cell[y][x];
 		for (int yKoordinate = 0; yKoordinate < Cells.length; yKoordinate++) {
 
 			for (int xKoordinate = 0 ;xKoordinate < Cells[yKoordinate].length; xKoordinate++) {
