@@ -160,36 +160,48 @@ public class Game implements Runnable{
 	}
 	
 	//TODO Algorithm to iterate through all neighboring cells in a circle and open them as well.
-	private void openCell(int x, int y) {
-		//First count the bombs around the selected Cell
-		for (int tmpY = y - 1; tmpY < y - 1; tmpY++) {
-			for (int tmpX = x - 1; tmpX < x + 2; tmpX++) {
-				if (tmpX == x && tmpY == y) {
-					continue;
-				}
-				else if(Cells[tmpY][tmpX].Bomb == true){
-					Cells[y][x].neighboringBombs++;		
-				}
-				
+	private int openCell(int x, int y) {
+		//check if the coordinates exist
+		if(x >= 0 && x <= Cells[0].length - 1 && y >= 0 && y <= Cells.length - 1) {
+			Cells[y][x].Hidden = false;
+			//if there is a Bomb at (x,y) stop the method
+			if(Cells[y][x].Bomb == true) {
+				return 0;
 			}
 			
-		}
-		//if there are no Bombs 
-		//open all surrounding Cells
-		if(Cells[y][x].neighboringBombs != 0) {
-			for (int tmpY = y - 1; tmpY < y - 1; tmpY++) {
-				for (int tmpX = x - 1; tmpX < x + 2; tmpX++) {
-					if (tmpX == x && tmpY == y) {
-						continue;
+			//Cascade through all neighbor Cells:
+			//First count the bombs around the selected Cell
+			for (int tmpY = y - 1; tmpY < y + 2; tmpY++) {
+				//TODO Debug continue behavior: it is supposed to jump to the next iteration when index is out of bounds, but it jumps to the else if statement
+	xIteration : 	for (int tmpX = x - 1; tmpX < x + 2; tmpX++) {
+					if (tmpX == x && tmpY == y || tmpX < 0 || tmpX > Cells[0].length - 1 || tmpY < 0 || tmpY > Cells.length - 1) {
+						continue xIteration;
 					}
-					else if(Cells[tmpY][tmpX].Hidden == true){
-						openCell(tmpX, tmpY);
+					else if(Cells[tmpY][tmpX].Bomb == true){
+						Cells[y][x].neighboringBombs++;		
 					}
 					
 				}
 				
 			}
+			//Then, if there are no bombs 
+			//open all surrounding Cells
+			if(Cells[y][x].neighboringBombs == 0) {
+				for (int tmpY = y - 1; tmpY < y + 2; tmpY++) {
+					for (int tmpX = x - 1; tmpX < x + 2; tmpX++) {
+						if (tmpX == x && tmpY == y || tmpX < 0 || tmpX > Cells[0].length - 1 || tmpY < 0 || tmpY > Cells.length - 1) {
+							continue;
+						}
+						else if(Cells[tmpY][tmpX].Hidden == true){
+							openCell(tmpX, tmpY);
+						}
+						
+					}
+					
+				}
+			}
+
 		}
-		Cells[y][x].Hidden = false;
+		return 0;
 	}
 }

@@ -10,7 +10,6 @@ public class Cell {
 	}
 	
 	public Cell(boolean Bomb) {
-		// TODO Auto-generated constructor stub
 		this.Bomb = Bomb;
 		Hidden = true;
 	}
@@ -30,7 +29,7 @@ public class Cell {
 			return 'O';
 		}
 		else if(neighboringBombs < 10 && neighboringBombs > 0) {
-			return (char)neighboringBombs;
+			return (char)('0' + neighboringBombs);
 		}
 		else {
 			return ' ';
