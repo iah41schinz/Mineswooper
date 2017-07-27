@@ -1,6 +1,5 @@
 import java.util.Random;
 import java.util.Scanner;
-import java.lang.Thread;
 public class Game implements Runnable{
 	
 	Cell[][] Cells;
