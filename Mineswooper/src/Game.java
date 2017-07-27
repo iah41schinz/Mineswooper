@@ -54,6 +54,7 @@ public class Game implements Runnable{
 			}
 			//if the number of defused bombs equals the number of bombs generated
 			// the victory screen is displayed and the gameloop will stop.
+			//TODO winning condition does not work
 			else if (bombsDefused == numBombs) {
 				System.out.println("- YOU WIN -");
 				scan.nextLine();
@@ -159,7 +160,13 @@ public class Game implements Runnable{
 		} while (true);
 	}
 	
-	//TODO Algorithm to iterate through all neighboring cells in a circle and open them as well.
+	
+	/**Opens the specified Cell and
+	 * cascades through all Cells opening their neighbors if there is no bomb near them.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private int openCell(int x, int y) {
 		//check if the coordinates exist
 		if(x >= 0 && x <= Cells[0].length - 1 && y >= 0 && y <= Cells.length - 1) {
@@ -172,7 +179,6 @@ public class Game implements Runnable{
 			//Cascade through all neighbor Cells:
 			//First count the bombs around the selected Cell
 			for (int tmpY = y - 1; tmpY < y + 2; tmpY++) {
-				//TODO Debug continue behavior: it is supposed to jump to the next iteration when index is out of bounds, but it jumps to the else if statement
 	xIteration : 	for (int tmpX = x - 1; tmpX < x + 2; tmpX++) {
 					if (tmpX == x && tmpY == y || tmpX < 0 || tmpX > Cells[0].length - 1 || tmpY < 0 || tmpY > Cells.length - 1) {
 						continue xIteration;
