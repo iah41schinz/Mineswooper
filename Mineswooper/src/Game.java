@@ -24,7 +24,7 @@ public class Game implements Runnable{
 			}
 		}
 		
-		//Cells are Randomly selected as Bombs
+		//Cells are randomly selected as Bombs
 		for (int i = 0; i < numBombs; i++) {
 			XofRandom = r.nextInt(x);
 			YofRandom = r.nextInt(y);
@@ -80,8 +80,12 @@ public class Game implements Runnable{
 			System.out.print("Y:");
 			y = getIntfromInput(0, Cells.length,"The specified Coordinate does not exist.\nTry again:");
 			//Flagging a flagged Cell removes the Flag and ends the turn
-			if(Cells[y][x].Flagged == true) {Cells[y][x].Flagged = false; break;}
-			Cells[y][x].Flagged = true;
+			if(Cells[y][x].Flagged == true) {
+				Cells[y][x].Flagged = false; 
+				break;
+			}
+			else if(Cells[y][x].Hidden == true )
+				Cells[y][x].Flagged = true;
 			break;
 		case "D":
 		case "d":
