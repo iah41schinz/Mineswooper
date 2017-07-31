@@ -81,9 +81,9 @@ public class Game implements Runnable{
 		case "p":
 		case "P":
 			System.out.print("X:");
-			x = getIntfromInput(0, Cells[0].length,"The specified Coordinate does not exist.\\nTry again:");
+			x = getIntfromInput(0, Cells[0].length - 1,"The specified Coordinate does not exist.\\nTry again:");
 			System.out.print("Y:");
-			y = getIntfromInput(0, Cells.length,"The specified Coordinate does not exist.\nTry again:");
+			y = getIntfromInput(0, Cells.length -1,"The specified Coordinate does not exist.\nTry again:");
 			//Flagging a flagged Cell removes the Flag and ends the turn
 			if(Cells[y][x].Flagged == true) {
 				Cells[y][x].Flagged = false; 
