@@ -13,8 +13,14 @@ public class Game implements Runnable{
 	int bombsDefused = 0;
 	Random r = new Random();
 	
-	public Game(int x, int y,int numBombs) {
-		this.numBombs = numBombs;
+	public Game() {
+		System.out.println("Specify the games size:");
+		System.out.print("X:");
+		x = this.getIntfromInput(1, 100, "Only 1 - 100 allowed");
+		System.out.print("Y:");
+		y = this.getIntfromInput(1, 100, "Only 1 - 100 allowed");
+		System.out.println("Specify the number of bombs:");
+		numBombs = this.getIntfromInput(1, x*y, "The number of Bombs has to be within the size of the field");
 		//The Cells are generated
 		Cells = new Cell[y][x];
 		for (int yKoordinate = 0; yKoordinate < Cells.length; yKoordinate++) {
